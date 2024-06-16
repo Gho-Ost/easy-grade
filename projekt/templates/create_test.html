@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block content %}
+</div>
+    <head>
+        <title>Create a Test</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        
+        <script>
+            let questionIndex = 0;
+            
+            $(document).ready(function(){
+
+                $('#add-question-btn').click(function(){
+                    let questionType = $('#question-type').val();
+                    let questionHtml = '';
+
+                    if (questionType === 'short') {
+                        questionHtml = `
+                        <div class="card mt-3" id="question-${questionIndex}">
+                            <div class="card-body">
+                                <input type="hidden" class="form-control" name="questions,${questionIndex},type" value="short">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="question-name">Question ${questionIndex + 1}</h3>
+                                    <button type="button" class="btn btn-danger delete-question-btn" data-question-id="${questionIndex}">Delete Question</button>
+                                </div>
+                                <div class="form-row">
+                                    <label>Question Text:</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},text" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>Number of Points:</label>
+                                    <input type="number" class="form-control" name="questions,${questionIndex},points" required>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else if (questionType === 'multiple-choice') {
+                        questionHtml = `
+                        <div class="card mt-3" id="question-${questionIndex}">
+                            <div class="card-body">
+                                <input type="hidden" class="form-control" name="questions,${questionIndex},type" value="multiple-choice">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="question-name">Question ${questionIndex + 1}</h3>
+                                    <button type="button" class="btn btn-danger delete-question-btn" data-question-id="${questionIndex}">Delete Question</button>
+                                </div>
+                                <div class="form-row">
+                                    <label>Question Text:</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},text" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>Number of Points:</label>
+                                    <input type="number" class="form-control" name="questions,${questionIndex},points" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>Options:</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},optionsA" placeholder="Option A" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>&nbsp;</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},optionsB" placeholder="Option B" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>&nbsp;</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},optionsC" placeholder="Option C">
+                                </div>
+                                <div class="form-row">
+                                    <label>&nbsp;</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},optionsD" placeholder="Option D">
+                                </div>
+                                <div class="form-row">
+                                    <label>Correct Answer:</label>
+                                    <select class="form-control" name="questions,${questionIndex},correct_answer" required>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>`;
+                    } else if (questionType === 'fill-gaps') {
+                        questionHtml = `
+                        <div class="card mt-3" id="question-${questionIndex}">
+                            <div class="card-body">
+                                <input type="hidden" class="form-control" name="questions,${questionIndex},type" value="fill-gaps">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="question-name">Question ${questionIndex + 1}</h3>
+                                    <button type="button" class="btn btn-danger delete-question-btn" data-question-id="${questionIndex}">Delete Question</button>
+                                </div>
+                                <div class="form-row">
+                                    <label>Question Text (use '_' for gaps):</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},text" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>Number of Points:</label>
+                                    <input type="number" class="form-control" name="questions,${questionIndex},points" required>
+                                </div>
+                                <div class="form-row">
+                                    <label>Fill-in Answers (comma-separated):</label>
+                                    <input type="text" class="form-control" name="questions,${questionIndex},answers" required>
+                                </div>
+                            </div>
+                        </div>`;
+                    }
+
+                    $('#questions-container').append(questionHtml);
+                    questionIndex++;
+                });
+            });
+            
+            $(document).on('click', '.delete-question-btn', function() {
+                let questionId = $(this).data('question-id');
+                $(`#question-${questionId}`).remove();
+
+                // Re-index the questions
+                $('#questions-container .card').each(function(index) {
+                    let oldId = parseInt($(this).attr('id').split('-')[1]);
+                    if (oldId > questionId) {
+                        let newId = oldId - 1;
+
+                        // Update the id attribute
+                        $(this).attr('id', `question-${newId}`);
+
+                        // Update the question header
+                        $(this).find('h3').text(`Question ${newId + 1}`);
+
+                        // Update the data-question-id for the delete button
+                        $(this).find('.delete-question-btn').data('question-id', newId);
+
+                        // Update the name attributes for form fields
+                        $(this).find('.form-control').each(function() {
+                            let name = $(this).attr('name');
+                            if (name) {
+                                let updatedName = name.replace(`,${oldId},`, `,${newId},`);
+                                $(this).attr('name', updatedName);
+                            }
+                        });
+                    }
+                });
+                questionIndex--;
+            });
+
+            // Function to remove flash messages after 30 seconds
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    // Select the flash message container
+                    var flashMessages = document.querySelectorAll('.flash-message');
+                    flashMessages.forEach(function(message) {
+                        message.remove();
+                    });
+                }, 10000); // 10000 milliseconds = 10 seconds
+            });
+        </script>
+    </head>
+    <body>
+        
+        <div class="container">
+            <div class="flash-container mt-5">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-message alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-5">
+                <h1>Create a Test</h1>
+                <button type="submit" form="test-form" class="btn btn-primary">Save Test</button>
+            </div>
+            <form id="test-form" method="post" action="/save_test" class="bottom-margin">
+                <div class="form-row">
+                    <label for="subject">Subject Name:</label>
+                    <input type="text" class="form-control" id="subject" name="subject" required>
+                </div>
+                <div class="form-row">
+                    <label for="topic">Topic Name:</label>
+                    <input type="text" class="form-control" id="topic" name="topic" required>
+                </div>
+                <div class="form-row">
+                    <label for="date">Date of Test:</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="form-row">
+                    <label for="time">Time for Completing the Test (in minutes):</label>
+                    <input type="number" class="form-control" id="time" name="time" required>
+                </div>
+
+                <div id="questions-container" class="mt-4">
+                    <!-- Questions will be dynamically added here -->
+                </div>
+
+                <div class="form-row">
+                    <label for="question-type">Add Question:</label>
+                    <select class="form-control" id="question-type" style="max-width: 240px;">
+                        <option value="short">Short Written Reply</option>
+                        <option value="multiple-choice">Multiple Choice (A, B, C, D)</option>
+                        <option value="fill-gaps">Fill in the Gaps</option>
+                    </select>
+                    <button type="button" id="add-question-btn" class="btn btn-secondary">Add Question</button>
+                </div>
+
+            </form>
+        </div>
+    </body>
+{% endblock %}

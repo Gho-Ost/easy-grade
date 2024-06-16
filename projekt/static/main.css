@@ -1,0 +1,132 @@
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.form-row label {
+    flex: 0 0 200px;
+    max-width: 200px;
+    margin-right: 10px;
+}
+
+.form-row .form-control {
+    flex: 1;
+}
+
+.bottom-margin {
+    margin-bottom: 100px;
+}
+
+.card {
+    margin-bottom: 20px;
+    
+}
+
+.question-name {
+    margin-bottom: 20px;
+}
+
+#add-question-btn {
+    margin-left: 10px;
+}
+.high-contrast {
+    --bs-body-color: #ffffff;
+    --bs-body-bg: #000000;
+    --bs-gray: #ffffff;
+    --bs-gray-dark: #ffffff; 
+    --bs-gray-200: #ffffff; 
+    --bs-gray-300: #ffffff; 
+    --bs-gray-400: #ffffff;
+    --bs-gray-500: #ffffff; 
+    --bs-gray-600: #ffffff;
+    --bs-gray-700: #ffffff;
+    --bs-gray-800: #ffffff;
+    --bs-gray-900: #ffffff; 
+    --bs-secondary: #ffffff; 
+    --bs-secondary-rgb: 255, 255, 255;
+    --bs-heading-color: #ffffff;
+    --bs-label-color: #ffffff;
+}
+
+.high-contrast .form-row label {
+    color: #ffffff; 
+}
+
+.high-contrast .form-row .form-control {
+    background-color: #000000; 
+    color: #ffffff; 
+    border-color: #ffffff;
+}
+
+.high-contrast .card {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff; 
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; 
+}
+
+
+
+.high-contrast .btn {
+    background-color: #ffffff; 
+    color: #000000; 
+    border: 1px solid #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; 
+}
+
+.high-contrast .btn:hover {
+    background-color: #FFD700; 
+    border-color: #ffffff;
+    color: #000000; 
+}
+
+.high-contrast .navbar {
+    background-color: #000000; 
+    color: #ffffff; 
+}
+
+
+.high-contrast #default-btn {
+    background-color: var(--bs-primary); 
+    color: #ffffff; 
+    border: 1px solid #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.high-contrast #default-btn:hover {
+    background-color: #ffffff; 
+    color: #000000; 
+    border-color: #000000; 
+}
+
+.high-contrast .btn-danger {
+    background-color: #dc3545; 
+    color: #ffffff; 
+    border-color: #ffffff;
+}
+
+.high-contrast #high-contrast-btn {
+    background-color: var(--bs-dark); 
+    color: #ffffff; 
+    border: 1px solid #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.high-contrast #high-contrast-btn:hover {
+    background-color: #FFD700; 
+    border-color: #ffffff;
+    color: #000000; 
+}
+
+
+.high-contrast .body{
+    color: #ffffff;
+}
+.high-contrast label{
+    color: #ffffff;
+}
+
+.high-contrast .imgfilename{
+    color: #ffffff;
+}

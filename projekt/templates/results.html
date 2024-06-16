@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid text-center " style="margin-top: 20px;">
+
+  <div class="row justify-content-center">
+    <div class="col-md-4 ">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category or 'danger' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+      <h2 style="margin-bottom: 20px;">Results of {{ test['topic'] }} test:</h2>
+      {% for res in results %}
+<div class="card mb-4">
+  <!-- Assuming 'res[1]' contains the image path -->
+  <img src="{{ url_for('main.serve_image', filename=res[1]) }}" class="card-img-top" alt="Test Image">
+  <div class="card-body">
+    <!-- Assuming 'res[0]' contains the grade -->
+    <h5 class="card-title">Grade: {{ res[0] }}</h5>
+    <h6 class="card-subtitle mb-2">Max points: {{ test['max_points'] }}</h6>
+    <p class="card-text">
+        {% for task_number, p in res[2] %}
+            Task {{ task_number }}: {{ p }}/{{ points[task_number-1] }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+  </div>
+</div>
+{% endfor %}
+<a href="/grade_test" class="btn btn-primary btn-sm mb-10">Go Back to Grading</a>
+    </div>
+    
+</div>
+    </div>
+  {% endblock %}
+  

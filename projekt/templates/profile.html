@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid text-center " style="margin-top: 20px;">
+  <h1 class="title mb-3 ">
+    Welcome, {{ name }}!
+  </h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category or 'danger' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+<div class="row justify-content-center">
+  <div class="col-md-3 ">
+    <h2 style="margin-bottom: 20px;">Your Created Tests:</h2>
+    {% for test in created_tests %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ test[1] }}</h5>
+          <h6 class="card-subtitle mb-2">{{ test[2] }}</h6>
+          <p class="card-text">{{ test[3] }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-3 ">
+    <h2 style="margin-bottom: 20px;">Your Graded Tests:</h2>
+    {% for test in graded_tests %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ test[1] }}</h5>
+          <h6 class="card-subtitle mb-2 ">{{ test[2] }}</h6>
+          <p class="card-text">{{ test[3] }}</p>
+          <canvas id="gradeChart-{{ test[0] }}"></canvas>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for idx in range(graded_tests|length) %}
+        var ctx = document.getElementById('gradeChart-{{ idx+1 }}');
+        if (ctx) {
+            var myChart = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for grade, count in grades[idx] %}
+                            "{{ grade }}",
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Grade Distribution',
+                        data: [
+                            {% for grade, count in grades[idx] %}
+                                {{ count }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        {% endfor %}
+    });
+</script>
+{% endblock %}

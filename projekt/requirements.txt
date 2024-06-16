@@ -1,0 +1,11 @@
+Flask==3.0.0
+Flask-BabelEx==0.9.4
+Flask-Login==0.6.3
+Flask-Mail==0.9.1
+flask-mailman==1.0.0
+Flask-Principal==0.4.0
+Flask-Security==3.0.0
+Flask-Security-Too==5.3.3
+Flask-Session==0.5.0
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.1

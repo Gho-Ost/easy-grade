@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mt-10 mb-10">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+  <div class="alert alert-{{ category or 'danger' }}">
+    {{ message }}
+  </div>
+{% endfor %}
+{% endwith %}</div>
+<style>
+    .card-title {
+        font-size: 4em;
+    }
+    .card {
+        cursor: pointer;
+        transition: background-color 0.5s, color 0.5s;
+        min-height: 400px;
+        color:  #25449b;
+    }
+    .card:hover {
+        background-color: #007bff; 
+        color: white; 
+    }   
+    .card:hover .card-title {
+        color: white; 
+    }
+    .high-contrast .card:hover {
+    background-color: #656464; /* Tło karty po najechaniu */
+    border-color: #ffffff; /* Kolor obramowania karty po najechaniu */
+}
+.main{
+    color: #25449b;
+}
+.high-contrast .main{
+    color: #ffffff;
+}
+
+.bi {
+            font-size: 36px; /* Adjust the font-size to make the icon bigger */
+                }
+
+</style>
+<div class="container  main">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4 mt-4" style="font-size: 5em;">Easy Grade</h1>
+            <h1 class="text-center mb-4 mt-4">Grading made simple!</h1>
+            
+
+           
+            <div class="row">
+               
+                    <div class="col-md-6 mb-8">
+                        <div class="card" onclick="location.href='{{ url_for('main.create_test') }}'">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <h3 class="text-center card-title ">Create a test</h3>
+                                <p class="text-center card-text ">Create a test with our simple interface - making tests was never this easy! Just choose the type of question, add some text, and you're done! </p>
+                                <div class="soace" style="margin-bottom: 50px;"></div>
+                                <i class="bi bi-pencil"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-8">
+                        <div class="card" onclick="location.href='{{ url_for('main.grade_test') }}'">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <h5 class="text-center card-title">Grade a test</h5>
+                                <p class="text-center card-text">Grade tests with our automatic test checker that helps you save time! Our tools scan your test and count points for you</p>
+                                <div class="soace" style="margin-bottom: 50px;"></div>
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

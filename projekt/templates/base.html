@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" id="html-tag" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flask Auth Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+
+</head>
+<style>
+    body { min-height: 100vh; padding-top: 56px; color:  #25449b; }
+.dot-background {
+  background-color: #fff;
+  background-image: radial-gradient(#000 10%, transparent 10%);
+  background-size: 10px 10px;
+}
+.high-contrast .dot-background {
+  background-color: #000;
+  background-image: radial-gradient(#fff 10%, transparent 10%);
+}
+.card {
+    
+        color:  #25449b;
+    }
+
+</style>
+<body class="dot-background" id="main">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" aria-current="{{ 'page' if request.endpoint == 'main.index' else '' }}" href="{{ url_for('main.index') }}">Home</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.profile' %}active{% endif %}" aria-current="{{ 'page' if request.endpoint == 'main.profile' else '' }}" href="{{ url_for('main.profile') }}">Profile</a>
+                    </li>
+                    {% endif %}
+                    {% if not current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" aria-current="{{ 'page' if request.endpoint == 'auth.login' else '' }}" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.signup' %}active{% endif %}" aria-current="{{ 'page' if request.endpoint == 'auth.signup' else '' }}" href="{{ url_for('auth.signup') }}">Signup</a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.logout' %}active{% endif %}" aria-current="{{ 'page' if request.endpoint == 'auth.logout' else '' }}" href="{{ url_for('auth.logout') }}">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <!-- High Contrast Mode Button -->
+                <button id="high-contrast-btn" class="btn btn-dark btn-outline-light me-2" onclick="toggleHighContrast()">A</button>
+
+                <!-- Default Button for comparison -->
+                <button id="default-btn" class="btn btn-primary btn-outline-light me-2" onclick="toggleDefault()">A</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid">
+        <div class="container-fluid">
+           {% block content %}
+           {% endblock %}
+        </div>
+    </main>
+
+    <script>
+        function toggleHighContrast() {
+            document.body.classList.add('high-contrast');
+            localStorage.setItem('contrastMode', 'high');
+            changeBgPrimaryToBgDark();
+            changeBgDotToBgDark();
+            document.getElementById('html-tag').setAttribute('data-bs-theme', 'dark');
+        }
+
+        function toggleDefault() {
+            document.body.classList.remove('high-contrast');
+            localStorage.setItem('contrastMode', 'default');
+            changeBgDarkToBgPrimary();
+            changeBgDarkToBgDot();
+            document.getElementById('html-tag').setAttribute('data-bs-theme', 'light');
+        }
+
+        function changeBgPrimaryToBgDark() {
+            let elements = document.querySelectorAll('.bg-primary');
+            elements.forEach(element => {
+                element.classList.remove('bg-primary');
+                element.classList.add('bg-dark');
+            });
+        }
+
+        function changeBgDarkToBgPrimary() {
+            let elements = document.querySelectorAll('.bg-dark');
+            elements.forEach(element => {
+                element.classList.remove('bg-dark');
+                element.classList.add('bg-primary');
+            }); 
+        }
+        function changeBgDotToBgDark() {
+            let element = document.getElementById('main');
+            
+            element.classList.remove('dot-background');
+            element.classList.add('bg-dark');
+            
+        }
+
+        function changeBgDarkToBgDot() {
+            let element = document.getElementById('main');
+            
+            element.classList.remove('bg-primary');
+            element.classList.add('dot-background');
+            
+        }
+        
+
+        // Check local storage for contrast mode preference
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (localStorage.getItem('contrastMode') === 'high') {
+                document.body.classList.add('high-contrast');
+                changeBgPrimaryToBgDark();
+                changeBgDotToBgDark();
+                document.getElementById('html-tag').setAttribute('data-bs-theme', 'dark');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

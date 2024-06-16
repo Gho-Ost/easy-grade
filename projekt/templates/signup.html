@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <h3 class="h3 mb-3">Sign Up</h3>
+            <div class="card">
+                <div class="card-body">
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        {% if category == 'login' %}
+                        <div class="alert alert-danger">
+                            {{ message }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+                        </div>
+                        {% else %}
+                        <div class="alert alert-{{ category or 'danger' }}">
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+
+
+
+                 
+                    <form method="POST" action="/signup">
+                        <div class="mb-3">
+                          
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Email" autofocus>
+                        </div>
+
+                        <div class="mb-3">
+                           
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Name">
+                        </div>
+                        <div class="mb-3">
+                           
+                            <input type="text" class="form-control form-control-lg" id="surname" name="surname" placeholder="Surname">
+                        </div>
+
+                        <div class="mb-3">
+                       
+                            <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
+                        </div>
+
+                        <button type="submit" class="btn btn-info btn-lg btn-block">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

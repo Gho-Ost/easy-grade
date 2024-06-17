@@ -9,7 +9,6 @@ from reportlab.lib.utils import ImageReader, simpleSplit
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 
-from pdf2image import convert_from_bytes, convert_from_path
 from io import BytesIO
 
 pdfmetrics.registerFont(TTFont('VeraBd', 'VeraBd.ttf'))
